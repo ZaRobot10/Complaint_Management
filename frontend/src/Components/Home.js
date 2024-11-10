@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import UserDashboard from './Userdashboard';
 
 const Home = ({ userData }) => {
   const navigate = useNavigate();
@@ -14,9 +15,9 @@ const Home = ({ userData }) => {
 
   return (
     <div>
-      <h1>Welcome {userData?.name}</h1>
-      <p>Roll Number: {userData?.rollNumber}</p>
-      <p>Role: {userData?.role}</p>
+
+      {/* Role-based View */}
+      <UserDashboard user={userData} />
 
       {/* Logout Button */}
       <button 
