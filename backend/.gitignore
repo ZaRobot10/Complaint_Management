@@ -37,8 +37,3 @@ pids/
 *.pid
 *.seed
 *.swp
-
-#routes
-complaint.js
-#model
-Complaint.js
