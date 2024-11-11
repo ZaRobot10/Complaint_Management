@@ -1,5 +1,6 @@
 import express from 'express';
 import Complaint from '../models/Complaint.js';
+import { fetchComplaints } from '../controllers/ComplaintController.js';
 
 const router = express.Router();
 
@@ -25,5 +26,8 @@ router.post('/submit', async (req, res) => {
     res.status(500).json({ message: 'Error submitting complaint', error });
   }
 });
+
+// Route to fetch complaints by roll number
+router.get('/fetch/:rollNumber', fetchComplaints);
 
 export default router;
