@@ -4,11 +4,11 @@ import axios from 'axios';
 
 const Student = ({ user }) => {
   const [complaint, setComplaint] = useState('');
-  const [category, setCategory] = useState('General'); // Default category
-  const [complaints, setComplaints] = useState([]); // To store the complaints fetched from the backend
-  const [viewMode, setViewMode] = useState('submit'); // State to toggle between views
+  const [category, setCategory] = useState('General');
+  const [complaints, setComplaints] = useState([]);
+  const [viewMode, setViewMode] = useState('submit');
+  const [image, setImage] = useState(null);  // New state for image file
 
-  // Fetch complaints when in 'view' mode
   useEffect(() => {
     if (viewMode === 'view') {
       fetchComplaints();
@@ -18,7 +18,7 @@ const Student = ({ user }) => {
   const fetchComplaints = async () => {
     try {
       const response = await axios.get(`http://localhost:5001/api/complaints/fetch/${user.rollNumber}`);
-      setComplaints(response.data); // Set the fetched complaints
+      setComplaints(response.data);
     } catch (error) {
       console.error('Error fetching complaints:', error);
     }
@@ -26,20 +26,24 @@ const Student = ({ user }) => {
 
   const handleComplaintSubmit = async () => {
     if (complaint) {
+      const formData = new FormData();
+      formData.append('name', user.name);
+      formData.append('rollNumber', user.rollNumber);
+      formData.append('category', category);
+      formData.append('description', complaint);
+      if (image) formData.append('image', image);  // Append image file if selected
+
       try {
-        // Send complaint data to backend
-        const response = await axios.post('http://localhost:5001/api/complaints/submit', {
-          name: user.name,
-          rollNumber: user.rollNumber,
-          category,
-          description: complaint
+        const response = await axios.post('http://localhost:5001/api/complaints/submit', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
         });
 
         if (response.status === 201) {
           alert('Complaint submitted successfully!');
-          setComplaints([...complaints, response.data.complaint]); // Add to the complaints list
+          setComplaints([...complaints, response.data.complaint]);
           setComplaint('');
-          setCategory('General');  // Reset the category after submission
+          setCategory('General');
+          setImage(null);  // Reset image after submission
         }
       } catch (error) {
         console.error('Error submitting complaint:', error);
@@ -51,7 +55,7 @@ const Student = ({ user }) => {
     <div>
       <UserCard user={user} />
 
-      {/* Top-left buttons */}
+      {/* Toggle between submit and view modes */}
       <div style={{
         position: 'absolute',
         top: '10px',
@@ -112,6 +116,14 @@ const Student = ({ user }) => {
             rows="4"
             style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
           />
+
+          {/* Image upload input */}
+          <input
+            type="file"
+            onChange={(e) => setImage(e.target.files[0])}
+            style={{ marginBottom: '10px' }}
+          />
+
           <button onClick={handleComplaintSubmit} style={{ padding: '10px 20px' }}>
             Submit Complaint
           </button>
@@ -119,6 +131,10 @@ const Student = ({ user }) => {
       ) : (
         <div style={{ marginTop: '2rem' }}>
           <h4>Complaint History</h4>
+          <div style={{
+           maxHeight: '400px',  // Adjust this value based on your layout
+           overflowY: 'auto',   // Enables scrolling
+          }}>
           {complaints.length > 0 ? (
             complaints.map((c, index) => (
               <div key={index} style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
@@ -127,11 +143,19 @@ const Student = ({ user }) => {
                 <p><strong>Status:</strong> {c.status}</p>
                 <p><strong>Assigned To:</strong> {c.assignedTo}</p>
                 <p><strong>Time Submitted:</strong> {new Date(c.timeSubmitted).toLocaleString()}</p>
+                {c.image && (
+                  <img
+                  src={`http://localhost:5001/api/complaints/uploads/${c.image}`}
+                  alt="Complaint attachment"
+                  style={{ maxWidth: '100%', marginTop: '10px' }}
+                />
+                )}
               </div>
             ))
           ) : (
             <p>No complaints submitted yet.</p>
           )}
+           </div>
         </div>
       )}
     </div>

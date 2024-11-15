@@ -9,6 +9,7 @@ const complaintSchema = new mongoose.Schema({
   assignedTo: { type: String, default: 'Not Assigned' },
   timeSubmitted: { type: Date, default: Date.now },
   reply: { type: [String], default: [] },
+  image: { type: String }  //field for storing image url or path
 });
 
 const Complaint = mongoose.model('Complaint', complaintSchema);

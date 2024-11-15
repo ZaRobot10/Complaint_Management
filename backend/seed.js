@@ -24,7 +24,7 @@ const seedUsers = async () => {
 
   // Define dummy data
   const users = [
-    /*{
+    {
       name: 'Ekankaar Khera',
       rollNumber: '2022UCM2343',
       password: await bcrypt.hash('123', 10),  // Hash the password
@@ -35,7 +35,7 @@ const seedUsers = async () => {
       rollNumber: '2022UCM2365',
       password: await bcrypt.hash('123', 10),  // Hash the password
       role: 'student',
-    },*/
+    },
     {
       name: 'admin',
       rollNumber: 'a1',

@@ -14,6 +14,7 @@ function App() {
       <div className="App">
         <Routes>
           {/* Pass setUserData to Login so it can set the user data upon successful login */}
+          <Route path="/" element={<Login setUserData={setUserData} />} />
           <Route path="/login" element={<Login setUserData={setUserData} />} />
 
           {/* Pass setUserData to ProtectedRoute for token verification */}

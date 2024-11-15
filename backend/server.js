@@ -1,13 +1,19 @@
-// index.js
-
+// server.js
 import express from 'express';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import connectDB from './config/db.js';
 import cors from 'cors';
 import complaintRoutes from './routes/complaint.js';
+import fs from 'fs';
+import path from 'path';
 
+const uploadsDir = path.join(process.cwd(), 'uploads');
+
+// Check if the uploads directory exists, and create it if it doesn't
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
 
 
 dotenv.config();
