@@ -5,7 +5,7 @@ const complaintSchema = new mongoose.Schema({
   rollNumber: { type: String, required: true },
   category: { type: String, required: true },
   description: { type: String, required: true },
-  status: { type: String, default: 'Submitted' },
+  status: { type: String, enum: ['Pending', 'Ongoing', 'Resolved'], default: 'Pending', required: true},
   assignedTo: { type: String, default: 'Not Assigned' },
   timeSubmitted: { type: Date, default: Date.now },
   reply: { type: [String], default: [] },

@@ -48,6 +48,12 @@ const seedUsers = async () => {
       password: await bcrypt.hash('teacher', 10),  // Hash the password
       role: 'faculty',
     },
+    {
+      name: 'teacher2',
+      rollNumber: 't2',
+      password: await bcrypt.hash('teacher', 10),  // Hash the password
+      role: 'faculty',
+    },
   ];
 
   try {
