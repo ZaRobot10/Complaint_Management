@@ -7,7 +7,8 @@ const Student = ({ user }) => {
   const [category, setCategory] = useState('General');
   const [complaints, setComplaints] = useState([]);
   const [viewMode, setViewMode] = useState('submit');
-  const [image, setImage] = useState(null); // New state for image file
+  const [image, setImage] = useState(null); // New state for image file/
+  const [filterStatus, setFilterStatus] = useState('All');
 
   useEffect(() => {
     if (viewMode === 'view') {
@@ -18,11 +19,19 @@ const Student = ({ user }) => {
   const fetchComplaints = async () => {
     try {
       const response = await axios.get(`http://localhost:5001/api/complaints/fetch/${user.rollNumber}`);
-      setComplaints(response.data);
+  
+      if (response.data && response.data.length > 0) {
+        // Sort complaints by timeSubmitted in descending order
+        const sortedComplaints = response.data.sort((a, b) => new Date(b.timeSubmitted) - new Date(a.timeSubmitted));
+        setComplaints(sortedComplaints);
+      } else {
+        setComplaints([]); // Set to empty if no complaints are returned
+      }
     } catch (error) {
       console.error('Error fetching complaints:', error);
     }
   };
+  
 
   const handleComplaintSubmit = async () => {
     if (complaint) {
@@ -79,9 +88,26 @@ const Student = ({ user }) => {
       <div style={{ marginTop: '60px' }}>
         <UserCard user={user} />
 
-        <h4 style={{ textAlign: 'center' }}>
-          {viewMode === 'submit' ? 'Submit a Complaint' : 'Complaint History'}
-        </h4>
+        <h4 style={{ textAlign: 'center', display: 'inline-block', marginRight: '10px' }}>
+    {viewMode === 'submit' ? 'Submit a Complaint' : 'Complaint History'}
+  </h4>
+
+  {viewMode !== 'submit' && (
+    <select
+      value={filterStatus}
+      onChange={(e) => setFilterStatus(e.target.value)}
+      style={{
+        padding: '8px',
+        marginLeft: '10px',
+        fontSize: '14px',
+        display: 'inline-block',
+      }}
+    >
+      <option value="All">All</option>
+      <option value="Active">Active</option>
+      <option value="Resolved">Resolved</option>
+    </select>
+  )}
 
         <div
           style={{
@@ -161,7 +187,14 @@ const Student = ({ user }) => {
               </button>
             </div>
           ) : complaints.length > 0 ? (
-            complaints.map((c, index) => (
+            complaints
+          .filter((complaint) => {
+            if (filterStatus === 'All') return true;
+            if (filterStatus === 'Active') return complaint.status !== 'Resolved';
+            if (filterStatus === 'Resolved') return complaint.status === 'Resolved';
+            return true;
+          })
+          .map((c, index) => (
               <div key={index} style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
                 <p>
                   <strong>Category:</strong> {c.category}
@@ -192,15 +225,16 @@ const Student = ({ user }) => {
                   </p>
                 )}
                 {c.reply.length > 0 && (
-                  <div>
-                    <strong>Replies:</strong>
-                    <ul>
-                      {c.reply.map((r, i) => (
-                        <li key={i}>{r}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px' }}>
+                  <strong style={{ display: 'block', marginBottom: '5px', color: '#333' }}>Replies:</strong>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '20px', margin: '0' }}>
+                    {c.reply.map((r, i) => (
+                      <li key={i} style={{ marginBottom: '5px', color: '#555' }}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               </div>
             ))
           ) : (

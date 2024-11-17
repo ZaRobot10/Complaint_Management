@@ -122,15 +122,15 @@ const Faculty = ({ user }) => {
                   <p><strong>Complaint:</strong> {c.description}</p>
                   <p><strong>Status:</strong> {c.status}</p>
                   {c.reply.length > 0 && (
-                    <div>
-                      <strong>Replies:</strong>
-                      <ul>
-                        {c.reply.map((r, index) => (
-                          <li key={index}>{r}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px' }}>
+                  <strong style={{ display: 'block', marginBottom: '5px', color: '#333' }}>Replies:</strong>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '20px', margin: '0' }}>
+                    {c.reply.map((r, i) => (
+                      <li key={i} style={{ marginBottom: '5px', color: '#555' }}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
                   {c.image && (
                     <p>
                       <strong>Attachment:</strong>{' '}
@@ -168,15 +168,15 @@ const Faculty = ({ user }) => {
                   </p>
                 )}
                 {c.reply.length > 0 && (
-                  <div>
-                    <strong>Replies:</strong>
-                    <ul>
-                      {c.reply.map((r, index) => (
-                        <li key={index}>{r}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px' }}>
+                  <strong style={{ display: 'block', marginBottom: '5px', color: '#333' }}>Replies:</strong>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '20px', margin: '0' }}>
+                    {c.reply.map((r, i) => (
+                      <li key={i} style={{ marginBottom: '5px', color: '#555' }}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
                 <textarea
                   placeholder="Write your reply here..."
                   rows="3"

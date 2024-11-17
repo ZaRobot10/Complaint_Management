@@ -10,6 +10,9 @@ const Admin = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [facultyLoading, setFacultyLoading] = useState(true);
   const [selectedFaculty, setSelectedFaculty] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedAssigned, setSelectedAssigned] = useState('All Assignments'); // Default to "All"
+
 
   useEffect(() => {
     const fetchComplaints = async () => {
@@ -41,6 +44,13 @@ const Admin = ({ user }) => {
 
     fetchFaculty();
   }, []);
+
+  // Use effect to reset `selectedAssigned` when `showHistory` changes
+  useEffect(() => {
+    if (showHistory) {
+      setSelectedAssigned('All Assignments');
+    }
+  }, [showHistory]);
 
   const assignComplaint = async (id, facultyName) => {
     if (!facultyName) {
@@ -87,12 +97,68 @@ const Admin = ({ user }) => {
       <div style={{ marginTop: '60px' }}>
         <UserCard user={user} />
 
-        <h4 style={{ textAlign: 'center' }}>
-          {showHistory ? 'Complaint History' : 'Assign Complaints'}
-        </h4>
+
+  <h4 style={{ textAlign: 'center', display: 'inline-block', marginRight: '10px' }}>
+    {showHistory ? 'Complaint History' : 'Assign Complaints'}
+  </h4>
+          
+   {/* filter for selecting the category */}
+  {(
+    <select
+      value={selectedCategory}
+      onChange={(e) => setSelectedCategory(e.target.value)}
+      style={{
+        padding: '8px',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        fontSize: '14px',
+        backgroundColor: '#fff',
+      }}
+    >
+      <option value="">All Categories</option>
+      <option value="Academic">Academic</option>
+      <option value="Facility">Facility</option>
+      <option value="Hygiene">Hygiene</option>
+      <option value="Financial Aid & Fees">Financial Aid & Fees</option>
+      <option value="Inappropriate Conduct">Inappropriate Conduct</option>
+      <option value="Other">Other</option>
+    </select>
+  )}
+
+    {!showHistory && (
+    <select
+      value={selectedAssigned}
+      onChange={(e) => setSelectedAssigned(e.target.value)}
+      style={{
+        padding: '8px',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        fontSize: '14px',
+        backgroundColor: '#fff',
+        marginLeft: '10px',
+      }}
+    >
+      <option value="All Assignments">All Assignments</option>
+      <option value="Assigned">Assigned</option>
+      <option value="Not Assigned">Not Assigned</option>
+    </select>
+
+    )}
+
+
 
         <div style={{ maxHeight: '350px', overflowY: 'auto', border: '1px solid #ddd', padding: '10px', borderRadius: '5px' }}>
-          {(showHistory ? history : filteredComplaints).map((c) => (
+          {(showHistory ? history : filteredComplaints).filter((c) =>
+  selectedCategory === '' || selectedCategory === 'All Categories' ? true : c.category === selectedCategory
+)
+.filter((c) =>
+  selectedAssigned === 'All Assignments'
+    ? true
+    : selectedAssigned === 'Assigned'
+    ? c.assignedTo !== 'Not Assigned'
+    : c.assignedTo === selectedAssigned
+)
+.map((c) => (
             <div key={c._id} style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
               <p><strong>Name:</strong> {c.name}</p>
               <p><strong>Roll Number:</strong> {c.rollNumber}</p>
@@ -102,11 +168,11 @@ const Admin = ({ user }) => {
               <p><strong>Assigned To:</strong> {c.assignedTo}</p>
               <p><strong>Time Submitted:</strong> {new Date(c.timeSubmitted).toLocaleString()}</p>
               {c.reply.length > 0 && (
-                <div>
-                  <strong>Replies:</strong>
-                  <ul>
-                    {c.reply.map((reply, index) => (
-                      <li key={index}>{reply}</li>
+                <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px' }}>
+                  <strong style={{ display: 'block', marginBottom: '5px', color: '#333' }}>Replies:</strong>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '20px', margin: '0' }}>
+                    {c.reply.map((r, i) => (
+                      <li key={i} style={{ marginBottom: '5px', color: '#555' }}>{r}</li>
                     ))}
                   </ul>
                 </div>
@@ -148,7 +214,8 @@ const Admin = ({ user }) => {
                       border: 'none',
                       borderRadius: '5px',
                       cursor: 'pointer',
-                      width: '100%',
+                      width: '10%',
+                      minWidth: '100px',
                     }}
                   >
                     Assign
