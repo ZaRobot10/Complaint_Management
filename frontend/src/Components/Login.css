@@ -1,71 +1,104 @@
-/* Login.css */
-
-/* Global styles for the form */
+/* General body styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7fc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #cce7ff, #e6ffe6);
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container styling */
+.container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Keyframe animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  
-  .container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  h1 {
-    text-align: center;
-    color: #3b5998;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-right: 25px;
-  }
-  
-  button {
-    width: 100%;
-    padding: 12px;
-    background-color: #3b5998;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #2d4373;
-  }
-  
-  button:focus {
-    outline: none;
-  }
-  
-  .error {
-    color: red;
-    font-size: 14px;
-    text-align: center;
-  }
-  
+}
+
+/* Title styling */
+h1 {
+  text-align: center;
+  color: #006d6d;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+/* Label styling */
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+/* Input field styling */
+input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+input:focus {
+  border-color: #006d6d;
+  box-shadow: 0 0 8px rgba(0, 109, 109, 0.3);
+  outline: none;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: #009999;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+button:hover {
+  background-color: #007373;
+}
+button:active {
+  transform: scale(0.98);
+}
+
+/* Error message styling */
+.error {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+/* Form field focus animation */
+input,
+button {
+  transition: all 0.3s ease-in-out;
+}

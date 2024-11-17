@@ -15,21 +15,24 @@ const Home = ({ userData }) => {
 
   return (
     <div>
-
       {/* Role-based View */}
       <UserDashboard user={userData} />
 
-      {/* Logout Button */}
+      {/* Logout Button at the top-right */}
       <button 
         onClick={handleLogout} 
         style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
           backgroundColor: 'red', 
           color: 'white', 
           padding: '10px 20px', 
           border: 'none', 
           cursor: 'pointer', 
           fontSize: '16px',
-          marginTop: '20px'
+          zIndex: 1000, // Ensure it's above other content
+          width: 'auto', // Ensure the button doesn't stretch to fill the space
         }}
       >
         Logout
